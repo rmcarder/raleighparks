@@ -10,7 +10,7 @@
 <meta name="twitter:title" content="Raleigh Parks" />
 <meta name="twitter:description" content="Raleigh Parks" />
 <meta name="twitter:image" content="https://github.com/rmcarder/fantasyfootball2016/blob/master/preview.PNG?raw=true" />
-  <title>Fantasy 2016</title>
+  <title>Raleigh Parks</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link href='https://fonts.googleapis.com/css?family=Fjalla+One|Exo:400,600|Ropa+Sans' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Arimo|Dosis|Lato' rel='stylesheet' type='text/css'>
@@ -19,46 +19,19 @@
 <body>
 <div class="header section">
   <div class="container">
-    <h1>Raleigh Parks</h1>
-    <p>We'll fill this in later <br>
+    <h1 class="head">Raleigh Parks</h1>
+    <p class='head'>We'll fill this in later <br>
       Sources: Raleigh, Nature</p>
   </div>
 </div>
 <div class="controls section">
   <div class="container">
-  <!--   <div class="btn-toolbar">
-      <label for="team">Position: </label>
-      <select id="team">
-        <option value="all">All</option>
-        <option class="select-dash" disabled="disabled">-Region-</option>
-        <option value="Northeast">Northeast</option>
-        <option value="Southeast">Southeast</option>
-        <option value="West">West</option>
-        <option value="Midwest">Midwest</option>
-        <option value="Southwest">Southwest</option>
-      </select>
-      <label for="tier">Tier: </label>
-      <select id="tier">
-        <option value="all">All</option>
-        <option class="select-dash" disabled="disabled">-State-</option>
-        <option value="1">1</option>
-        <option value=2>2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-       
-       </select>
-    </div>
-  </div> -->
+ 
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-10">
+      <div class="col-lg-2"></div>
+        <div class="col-lg-8">
             <div id="chart1"></div>
         </div>
          <div class="col-lg-2">
@@ -97,9 +70,11 @@
     team: 'all',
   };
   var margin = { top: 60, right: 60, bottom: 40, left: 80 };
-  var width = 800 - margin.right - margin.left;
-  var height = 650 - margin.top - margin.bottom;
-  var barMax = 8;
+  var width = 700 - margin.right - margin.left;
+  var height = 600 - margin.top - margin.bottom;
+var color_range = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
+var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
+
   
  // FETCH DATA
   d3.json('data.json', function (error, json) {
@@ -184,7 +159,9 @@
 
     rscale = d3.scale.sqrt()
       .domain([0, 33000])
-      .range([1,30]);
+      .range([1,20]);
+
+    chart.colorScale = d3.scale.linear().domain(data_bins).range(color_range);
 
 
      
@@ -245,7 +222,7 @@
      chart.pointTooltip = d3.tip()
        .attr('class', 'tooltip')
        .offset([-6, 0])
-       .html(function(d) { return d.Name +'<br>' + d.POS+', ' + d.Team + '<br> '+'Auction Estimate: '+ (d3.format('$.,0f"'))(d.Auction)+ '<br> '+'Ave. Projection: ' +(d3.format('.1f'))(d.EXPPTS)+ '<br> '+'ESPN Projection: '+(d3.format('.1f'))(d.ESPN)+ '<br> '+'ESPN OverValue: '+ (d3.format('.2f'))(d.ESPNOverValue)+ '<br> '+'Tier: '+ (d3.format('.f'))(d.Tier); });
+       .html(function(d) { return d.SITE +'<br>' + d3.format(',')(d.POP_SCORE) +' residents served ' + '<br> '+'Vulnerability Score: '+ (d3.format('.1f'))(d.VulnerabilityScore)+ '<br> '+'Circuitry Score: ' +(d3.format('.1f'))(d.CircuitryScore)+ '<br> '+'Pedestrian Safety Score: '+(d3.format('.1f'))(d.PedScore); });
 
      chart.pointTooltip(chart.svg);
  
@@ -268,6 +245,10 @@
 
     points.enter().append('circle')
        .attr('r',0)
+       .style('opacity',.7)
+       .on('mouseover', function(){
+          d3.select(this).style("stroke",'#fff');
+       })
        .on('mouseover', chart.pointTooltip.show)
        .on('mouseout', chart.pointTooltip.hide);
 
@@ -275,18 +256,8 @@
     points
     .transition().duration(3000).ease('elastic').delay(function(d, i) {
         return i / txdata.length * 500;  // Dynamic delay (i.e. each item delays a little longer)
-        }).style('opacity',.7)
-      .attr('class',function (d) {if (d.Tier===1.00) {return 'point';}
-          else if(d.Tier===2.00){return 'point2';}
-           else if(d.Tier===3){return 'point3';}
-            else if(d.Tier===4){return 'point4';}
-             else if(d.Tier===5){return 'point5';}
-              else if(d.Tier===6){return 'point6';}
-               else if(d.Tier===7){return 'point7';}
-                else if(d.Tier===8){return 'point8';}
-                 else if(d.Tier===9){return 'point9';}
-                  else if(d.Tier===10){return 'point10';}
-        ;})
+        })
+      .style('fill',function (d) { return chart.colorScale(d.Alpha); })
       .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
       .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
       .attr('r', function (d) { return rscale(d.POP_SCORE); });
@@ -296,7 +267,7 @@
     // Determine if current line is visible
    
     // Hide or show the elements
-    d3.select(this).transition().duration(400).style("r",0);
+    d3.select(this).transition().duration(400).style("stroke",'#fff');
 
   
   })

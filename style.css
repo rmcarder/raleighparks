@@ -1,10 +1,16 @@
- <style>
 
      @media only screen and (max-width: 1199px) { 
   #legend { 
     display: none; 
   } 
+
+
+ 
 }
+
+ .head { 
+    text-align: center; 
+  } 
    .axislabel {
       fill: #FFFFFF;
       color: #FFFFFF;
@@ -26,11 +32,6 @@
        stroke-width: 1.1;
     }
 
-  .line {
-    stroke: blue;
-    fill:none;
-    stroke-width: 4;
-  }
     
     .label {
       font-weight: 700;
@@ -182,5 +183,4 @@
 
     
 
-    
-  </style>
+ 
