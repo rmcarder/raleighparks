@@ -242,25 +242,21 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-10">
             <div id="chart1"></div>
         </div>
          <div class="col-lg-2">
             <div style="text-align:center" id="legendtitle"></div>
             <div style="text-align:center" id="legend"></div>
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-10">
             <div id="chart2"></div>
         </div>
-        <div class="col-lg-5">
-            <div id="chart3"></div>
-        </div>
+        
         <div class="col-lg-2">
             <div id="legend2"></div>
         </div>
-        <div class="col-lg-5">
-            <div id="chart4"></div>
-        </div>
+        
     </div>
 </div>  
 </div>
@@ -268,6 +264,12 @@
 <script type="text/javascript" src="https://npmcdn.com/science@1.9.3/science.v1.min.js"></script>
 <script type="text/javascript" src="https://npmcdn.com/simple-statistics@2.0.0/dist/simple-statistics.min.js"></script>
 <script type="text/javascript" src="https://npmcdn.com/d3-tip@0.6.7/index.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Fjalla+One|Exo:400,600|Ropa+Sans' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Exo" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Arimo|Dosis|Lato' rel='stylesheet' type='text/css'>
 <script>
   var data = [];
   var options = {
@@ -275,8 +277,8 @@
     team: 'all',
   };
   var margin = { top: 15, right: 15, bottom: 40, left: 80 };
-  var width = 450 - margin.right - margin.left;
-  var height = 350 - margin.top - margin.bottom;
+  var width = 1000 - margin.right - margin.left;
+  var height = 850 - margin.top - margin.bottom;
   var barMax = 8;
   
  // FETCH DATA
@@ -310,10 +312,7 @@
 
 
     var charts = [
-       new Chart('#chart1',QBData, 'ESPN', 'QB ESPN Projection (Points)', 'EXPPTS','QB Expert Consensus Projection (Points)', '.f', ',0s',220,350),
-       new Chart('#chart2',RBData, 'ESPN', 'RB ESPN Projection (Points)', 'EXPPTS', 'RB Expert Consensus Projection (Points)', '.0s', ',0s',40,260),
-       new Chart('#chart3',WRData, 'ESPN', 'WR ESPN Projection (Points)', 'EXPPTS', 'WR Expert Consensus Projection (Points)', '.0s', ',0s',50,280),
-       new Chart('#chart4',TEData, 'ESPN', 'TE ESPN Projection (Points)', 'EXPPTS', 'TE Expert Consensus Projection (Points)', '.0s', ',0s',70,200)
+       new Chart('#chart1',QBData, 'ESPN', 'Priority Park Rank', 'EXPPTS','Vulnerability', '.f', ',0s',220,350)
      ];
 
 
