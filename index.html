@@ -24,7 +24,7 @@
    .axislabel {
       fill: #FFFFFF;
       color: #FFFFFF;
-      font-family: 'Exo', sans-serif;
+      font-family: 'Alegreya Sans SC', sans-serif;
       font-size: 16px;
       }
     
@@ -39,12 +39,13 @@
       fill: none;
       stroke: #4c4c4c;
       shape-rendering: crispEdges;
+       stroke-width: 1.1;
     }
 
   .line {
     stroke: blue;
     fill:none;
-    stroke-width: 3;
+    stroke-width: 4;
   }
     
     .label {
@@ -137,7 +138,7 @@
 
    
     .axis text {
-        font-family: 'Arimo', sans-serif;
+        font-family: 'Open Sans', sans-serif;
         font-size: 11px;
         fill: #CECECE;
       }
@@ -146,14 +147,14 @@
        background: rgba(0,0,0,.75);
        color: white;
        font-size: 13px;
-       font-family: 'Arimo', sans-serif;
+       font-family: 'Open Sans', sans-serif;
        font-weight: 500;
        line-height: 1;
        border-radius: 8px;
      }
 
       .legendtext,#legend {
-      font-family: 'Arimo', sans-serif;
+      font-family: 'Open Sans', sans-serif;
       color: #CECECE;
           }
 
@@ -164,17 +165,17 @@
 
     body {
       background-color: #383838;
-      font-family: 'Arimo', sans-serif;
+      font-family: 'Open Sans', sans-serif;
       color: #CECECE;
           }
 
     th {
-       font-family: 'Exo', sans-serif;
+       font-family: 'Alegreya Sans SC', sans-serif;
         color: #FFFFFF;
         width: 400px;
                 } 
     h1,h3,h4,h5,h2{
-        font-family: 'Exo', sans-serif;
+        font-family: 'Alegreya Sans SC', sans-serif;
         color: #FFFFFF;
                 }   
     #tier,#team {
@@ -246,15 +247,17 @@
             <div id="chart1"></div>
         </div>
          <div class="col-lg-2">
-            <div style="text-align:center" id="legendtitle"></div>
+            <div style="text-align:center" id="legendtitle">Tier</div>
             <div style="text-align:center" id="legend"></div>
+            <div style="text-align:center" id="legendtitle2">Value</div>
+            <div id="legend2"></div>
         </div>
         <div class="col-lg-10">
             <div id="chart2"></div>
         </div>
         
         <div class="col-lg-2">
-            <div id="legend2"></div>
+          
         </div>
         
     </div>
@@ -264,6 +267,7 @@
 <script type="text/javascript" src="https://npmcdn.com/science@1.9.3/science.v1.min.js"></script>
 <script type="text/javascript" src="https://npmcdn.com/simple-statistics@2.0.0/dist/simple-statistics.min.js"></script>
 <script type="text/javascript" src="https://npmcdn.com/d3-tip@0.6.7/index.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Fjalla+One|Exo:400,600|Ropa+Sans' rel='stylesheet' type='text/css'>
@@ -277,8 +281,8 @@
     team: 'all',
   };
   var margin = { top: 15, right: 15, bottom: 40, left: 80 };
-  var width = 1000 - margin.right - margin.left;
-  var height = 850 - margin.top - margin.bottom;
+  var width = 800 - margin.right - margin.left;
+  var height = 650 - margin.top - margin.bottom;
   var barMax = 8;
   
  // FETCH DATA
@@ -615,7 +619,7 @@ var legend10=d3.select('#legend').select('svg').append('g')
 
     rscale = d3.scale.sqrt()
       .domain([0, 65])
-      .range([1,15]);
+      .range([1,50]);
 
 
      
