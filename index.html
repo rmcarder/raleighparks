@@ -20,8 +20,7 @@
 <div class="header section">
   <div class="container">
     <h1 class="head">Raleigh Parks</h1>
-    <p class='head'>We'll fill this in later <br>
-      Sources: Raleigh, Nature</p>
+    <p class='head'>Raleigh park things</p>
   </div>
 </div>
 <div class="controls section">
@@ -62,10 +61,10 @@
     tier: 'all',
     team: 'all',
   };
-  var margin = { top: 60, right: 60, bottom: 40, left: 80 };
+  var margin = { top: 15, right: 60, bottom: 40, left: 70 };
   var width = parseInt(d3.select('#chart1').style('width'), 10)
   var width = width - margin.right - margin.left;
-  var aspectRatio = .6
+  var aspectRatio = .7
   var height = width*aspectRatio;
   var color_range = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
   var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
@@ -91,13 +90,13 @@
 
 
     var charts = [
-       new Chart('#chart1',data, 'PriorityRank', 'Priority Park Rank', 'VulnerabilityScore','Vulnerability', '.f', ',0s',0,30,0,5)
+       new Chart('#chart1',data, 'PriorityRank', 'Priority Park Rank', 'VulnerabilityScore','Vulnerability',0,30,0,5)
      ];
 
  });
   
 
-  function Chart(selector, txdata, xvariable, xtitle, yvariable, ytitle, xAxisFormat, yAxisFormat, scaleMin, scaleMax, vulnMin, vulnMax) {    
+  function Chart(selector, txdata, xvariable, xtitle, yvariable, ytitle, scaleMin, scaleMax, vulnMin, vulnMax) {    
     var chart = this;
 
     chart.xvariable = xvariable;
@@ -133,59 +132,50 @@
      
 
     // AXES
-    var padding=0
-    var axispadding=50
-    var xaxispadding=35
+    chart.padding=0
+    chart.axispadding=50
+    chart.xaxispadding=35
 
 
-    // Axes
-    var xAxis = d3.svg.axis()
+
+
+    chart.xAxis = d3.svg.axis()
       .tickSize(-height,0)
       .scale(chart.x)
       .orient("bottom")
-      .ticks(10, xAxisFormat);
+      .ticks(10, '.f'); 
 
-    var yAxis = d3.svg.axis()
+    chart.yAxis = d3.svg.axis()
       .orient("left")
       .tickSize(-width)
       .scale(chart.y)
-      .ticks(10, yAxisFormat);
+      .ticks(10,'0s');
     
-    var gx = chart.svg.append("g")
+    chart.gx = chart.svg.append("g")
       .attr("class","y axis")
       .attr("transform","translate(0,"+ height + ")")
-      .call(xAxis)
+      .call(chart.xAxis)
       ;
 
-    var gy = chart.svg.append("g")
+    chart.gy = chart.svg.append("g")
       .attr("class","y axis")
-      .attr("transform","translate("+ padding + ",0)")
-      .call(yAxis)
+      .attr("transform","translate("+ chart.padding + ",0)")
+      .call(chart.yAxis);
       ;
 
-    chart.svg.append("text")
+    chart.ytext=chart.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("class","axislabel")
-      .attr("transform", "translate("+ (-axispadding) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+      .attr("transform", "translate("+ (-chart.axispadding) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
       .text(ytitle);
 
-   chart.svg.append("text")
+   chart.ytext = chart.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("class","axislabel")
-      .attr("transform", "translate("+ (width/2) +","+(height+(xaxispadding))+")")
+      .attr("transform", "translate("+ (width/2) +","+(height+(chart.xaxispadding))+")")
       .text(xtitle);  // centre below axis
       
-
-   // var circle = chart.svg.append("line")
-             //           .attr('x1', chart.x(scaleMin))
-            //            .attr('y1', chart.y(scaleMin))
-            //            .attr("x2", chart.x(scaleMax))
-            //            .attr("y2", chart.y(scaleMax))
-            //            .attr("stroke-width", 2)
-            //            .attr("stroke", "#F03B20");
-
-
-     chart.pointTooltip = d3.tip()
+  chart.pointTooltip = d3.tip()
        .attr('class', 'tooltip')
        .offset([-6, 0])
        .html(function(d) { return d.SITE +'<br>' + d3.format(',')(d.POP_SCORE) +' residents served ' + '<br> '+'Vulnerability Score: '+ (d3.format('.1f'))(d.VulnerabilityScore)+ '<br> '+'Circuitry Score: ' +(d3.format('.1f'))(d.CircuitryScore)+ '<br> '+'Pedestrian Safety Score: '+(d3.format('.1f'))(d.PedScore); });
@@ -200,14 +190,42 @@ d3.select(window).on('resize', resize);
 
 function resize() {
     // update width
+
+
     width = parseInt(d3.select('#chart1').style('width'), 10);
     width = width - margin.left - margin.right;
-    height=width*aspectRatio;
+    height = width*aspectRatio;
 
-    chart.svg = d3.select(selector)
+    chart.svg
       .attr('width', width + margin.right + margin.left)
       .attr('height', height);
     // resize the chart
+
+    chart.x
+      .range([0, width]);
+
+    chart.y
+      .range([height, 0]);
+
+    chart.xAxis
+      .tickSize(-height,0)
+      .scale(chart.x); 
+
+    chart.yAxis
+      .tickSize(-width)
+      .scale(chart.y);
+    
+    chart.gx
+      .attr("transform","translate(0,"+ height + ")")
+      .call(chart.xAxis);
+
+    chart.gy
+      .attr("transform","translate("+ chart.padding + ",0)")
+      .call(chart.yAxis);
+    
+
+
+    chart.update(txdata);
   
 }
 
@@ -219,14 +237,16 @@ function resize() {
 
   Chart.prototype.update = function(txdata) {
    var chart = this;
-  
-      //Options
-   
-    
 
+
+
+  
     // SCATTERPLOT
-    var points = chart.svg.selectAll('.point')
+    var points = chart.svg.selectAll('.points')
       .data(txdata);
+
+    points.exit().remove();
+
 
     points.enter().append('circle')
        .attr('r',0)
@@ -253,6 +273,7 @@ function resize() {
    
     // Hide or show the elements
     d3.select(this).transition().duration(400).style("stroke",'#fff');
+
 
   
   })
