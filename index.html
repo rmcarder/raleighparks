@@ -30,21 +30,18 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-2"></div>
-        <div class="col-lg-8">
+      <div class="col-lg-3 col-md-3"></div>
+        <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
             <div id="chart1"></div>
         </div>
-         <div class="col-lg-2">
+         <div class="col-lg-3 col-md-3 col-sm-3">
             <div style="text-align:center" id="legendtitle">Tier</div>
             <div style="text-align:center" id="legend"></div>
             <div style="text-align:center" id="legendtitle2">Value</div>
             <div id="legend2"></div>
         </div>
-        <div class="col-lg-10">
-            <div id="chart2"></div>
-        </div>
         
-        <div class="col-lg-2">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
           
         </div>
         
@@ -70,10 +67,12 @@
     team: 'all',
   };
   var margin = { top: 60, right: 60, bottom: 40, left: 80 };
-  var width = 700 - margin.right - margin.left;
-  var height = 600 - margin.top - margin.bottom;
-var color_range = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
-var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
+  var width = parseInt(d3.select('#chart1').style('width'), 10)
+  var width = width - margin.right - margin.left;
+  var aspectRatio = .6
+  var height = width*aspectRatio;
+  var color_range = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
+  var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
 
   
  // FETCH DATA
@@ -84,17 +83,6 @@ var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
 
       txdata=data.slice();
     
-
-      QBData = txdata.filter(function (d) {
-        return d.POS === 'QB';});
-      RBData = txdata.filter(function (d) {
-        return d.POS === 'RB';});
-      WRData = txdata.filter(function (d) {
-        return d.POS === 'WR';});
-      TEData = txdata.filter(function (d) {
-        return d.POS === 'TE';});
-
-      console.log(TEData);
 
 
     if (options.team !== 'all') {
@@ -109,24 +97,6 @@ var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
     var charts = [
        new Chart('#chart1',data, 'PriorityRank', 'Priority Park Rank', 'VulnerabilityScore','Vulnerability', '.f', ',0s',0,30,0,5)
      ];
-
-
-    // EVENT HANDLERS
-    d3.select('#tier').on('change', function () {
-      options.tier = d3.event.target.value;
-      options.team = 'all';
-      QBData = QBData.filter(function (d) {
-        return d.Tier === tier;});
-      RBData = RBData.filter(function (d) {
-        return d.Tier === tier;});
-      WRData = WRData.filter(function (d) {
-        return d.Tier === tier;});
-      TEData = TEData.filter(function (d) {
-        return d.Tier === tier;});
-
-      console.log(QBData);
-      charts.forEach(function (chart) { chart.update(txdata);});
-    });
 
  });
   
@@ -227,6 +197,25 @@ var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
      chart.pointTooltip(chart.svg);
  
      chart.update(txdata);
+
+
+
+d3.select(window).on('resize', resize); 
+
+function resize() {
+    // update width
+    width = parseInt(d3.select('#chart1').style('width'), 10);
+    width = width - margin.left - margin.right;
+    height=width*aspectRatio;
+
+    chart.svg = d3.select(selector)
+      .attr('width', width + margin.right + margin.left)
+      .attr('height', height);
+    // resize the chart
+  
+}
+
+     
   }
 
 
@@ -240,7 +229,7 @@ var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
     
 
     // SCATTERPLOT
-    var points = chart.svg.selectAll('.point, .point2, .point3, .point4')
+    var points = chart.svg.selectAll('.point')
       .data(txdata);
 
     points.enter().append('circle')
@@ -272,9 +261,21 @@ var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
   
   })
     
+ 
+    // update median ticks
+  //  var median = d3.median(chart.selectAll('.bar').data(), 
+    //    function(d) { return d.percent; });
+
+
+
+    // update axes
+    //chart.select('.x.axis.top').call(xAxis.orient('top'));
+   // chart.select('.x.axis.bottom').call(xAxis.orient('bottom'));
+
+}   
+    
+
      
-      
-    }
     // REGRESSION LINE
   
 </script>
