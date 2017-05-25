@@ -64,7 +64,7 @@
   var margin = { top: 15, right: 60, bottom: 40, left: 70 };
   var width = parseInt(d3.select('#chart1').style('width'), 10)
   var width = width - margin.right - margin.left;
-  var aspectRatio = .7
+  var aspectRatio = .8
   var height = width*aspectRatio;
   var color_range = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
   var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
@@ -90,7 +90,7 @@
 
 
     var charts = [
-       new Chart('#chart1',data, 'PriorityRank', 'Priority Park Rank', 'VulnerabilityScore','Vulnerability',0,30,0,5)
+       new Chart('#chart1',data, 'PriorityRank', 'Priority Park Rank', 'VulnerabilityScore','Vulnerability',0,30,1,5)
      ];
 
  });
@@ -123,8 +123,8 @@
       .nice();
 
     rscale = d3.scale.sqrt()
-      .domain([0, 33000])
-      .range([1,20]);
+      .domain([5000, 33000])
+      .range([0,30]);
 
     chart.colorScale = d3.scale.linear().domain(data_bins).range(color_range);
 
@@ -149,7 +149,7 @@
       .orient("left")
       .tickSize(-width)
       .scale(chart.y)
-      .ticks(10,'0s');
+      .ticks(4,'0s');
     
     chart.gx = chart.svg.append("g")
       .attr("class","y axis")
@@ -169,7 +169,7 @@
       .attr("transform", "translate("+ (-chart.axispadding) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
       .text(ytitle);
 
-   chart.ytext = chart.svg.append("text")
+   chart.xtext = chart.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("class","axislabel")
       .attr("transform", "translate("+ (width/2) +","+(height+(chart.xaxispadding))+")")
@@ -182,7 +182,35 @@
 
      chart.pointTooltip(chart.svg);
  
-     chart.update(txdata);
+   //  chart.update(txdata);
+
+  var points = chart.svg.selectAll('.points')
+      .data(txdata);
+
+
+    points.enter().append('circle')
+       .attr('r',0)
+       .style('opacity',.7)
+       .on('mouseover', function(){
+          d3.select(this).style("stroke",'#fff');
+       })
+       .on('mouseover', chart.pointTooltip.show)
+       .on('mouseout', chart.pointTooltip.hide);
+
+
+    points
+    .transition().duration(3000).ease('elastic').delay(function(d, i) {
+        return i / txdata.length * 700;  // Dynamic delay (i.e. each item delays a little longer)
+        })
+      .style('fill',function (d) { return chart.colorScale(d.Alpha); })
+      .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
+      .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
+      .attr('r', function (d) { return rscale(d.POP_SCORE); });
+
+    points
+    .on("click", function(){
+        d3.select(this).transition().duration(400).style("stroke",'#fff').style('stroke-width',3);
+         })
 
 
 
@@ -196,9 +224,9 @@ function resize() {
     width = width - margin.left - margin.right;
     height = width*aspectRatio;
 
-    chart.svg
+chart.svg
       .attr('width', width + margin.right + margin.left)
-      .attr('height', height);
+      .attr('height', height + margin.top + margin.bottom);
     // resize the chart
 
     chart.x
@@ -222,10 +250,25 @@ function resize() {
     chart.gy
       .attr("transform","translate("+ chart.padding + ",0)")
       .call(chart.yAxis);
+
+
+    chart.ytext
+      .attr("transform", "translate("+ (-chart.axispadding) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+      .text(ytitle);
+
+   chart.xtext
+      .attr("transform", "translate("+ (width/2) +","+(height+(chart.xaxispadding))+")")
+      .text(xtitle);  // centre below axis
+
+
+    points
+      .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
+      .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
+      .attr('r', function (d) { return rscale(d.POP_SCORE); });
     
 
 
-    chart.update(txdata);
+    //chart.update(txdata);
   
 }
 
@@ -235,48 +278,14 @@ function resize() {
 
 
 
-  Chart.prototype.update = function(txdata) {
-   var chart = this;
+  //Chart.prototype.update = function(txdata) {
+  // var chart = this;
 
 
 
   
     // SCATTERPLOT
-    var points = chart.svg.selectAll('.points')
-      .data(txdata);
-
-    points.exit().remove();
-
-
-    points.enter().append('circle')
-       .attr('r',0)
-       .style('opacity',.7)
-       .on('mouseover', function(){
-          d3.select(this).style("stroke",'#fff');
-       })
-       .on('mouseover', chart.pointTooltip.show)
-       .on('mouseout', chart.pointTooltip.hide);
-
-
-    points
-    .transition().duration(3000).ease('elastic').delay(function(d, i) {
-        return i / txdata.length * 500;  // Dynamic delay (i.e. each item delays a little longer)
-        })
-      .style('fill',function (d) { return chart.colorScale(d.Alpha); })
-      .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
-      .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
-      .attr('r', function (d) { return rscale(d.POP_SCORE); });
-
-    points
-    .on("click", function(){
-    // Determine if current line is visible
-   
-    // Hide or show the elements
-    d3.select(this).transition().duration(400).style("stroke",'#fff');
-
-
-  
-  })
+    
     
  
     // update median ticks
@@ -289,7 +298,7 @@ function resize() {
     //chart.select('.x.axis.top').call(xAxis.orient('top'));
    // chart.select('.x.axis.bottom').call(xAxis.orient('bottom'));
 
-}   
+//}   
     
 
      
