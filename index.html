@@ -20,7 +20,7 @@
 <div class="header section">
   <div class="container">
     <h1 class="head">Raleigh Parks</h1>
-    <p class='head'>Raleigh park things</p>
+    <p class='head'>The Neighborhood and Community Connections Program is a $1 million effort to increase walkable connections between Raleigh’s neighborhoods and nearby parks and greenways.</p>
   </div>
 </div>
 <div class="controls section">
@@ -34,9 +34,12 @@
             <div id="chart1"></div>
         </div>
          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-2">
-            <div style="text-align:center" id="legendtitle">Tier</div>
+          <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Vulnerability </strong>- This measure is used to promote the N&CC Program’s goal of health equity, by targeting investment in pedestrian infrastructure in those neighborhoods that would benefit most from increased walkability. Vulnerability scores are derived from socioeconomic and demographic indicators that correlate with high vulnerability to negative health outcomes such as heart disease and childhood obesity. The indicators used in this analysis are: Unemployment, Age Dependency, Educational Attainment, Housing Vacancy, and Poverty Rates.</div>
+            <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Circuitry </strong>- This measure is used to identify areas of the city where street network topology is inefficient, and thus areas that could benefit from the addition of new links and nodes. Circuitry scores are derived from the ratio of Euclidean Distance : Network Distance between an origin (census block) and a destination (park access point). A high circuitry score indicates that nearby residents have to travel a disproportionately long distance to reach their nearest park.</div>
+            <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Pedestrian Safety </strong>- This measure is used to identify park service areas that are particularly unsafe for pedestrians. Pedestrian Safety scores are derived from an analysis of street typology, speed limits, and the presence or absence of sidewalks within the park service area.</div>
+            <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Population</strong>- A fourth criteria considered in determining which projects to fund through the N&CC program is the population that would benefit from each proposed project. This chart visualizes the total population living within each park’s service area, which gives a sense of the potential number of people who could benefit from investments in each particular park.</div>
+            <div style="text-align:center" class="legendtitle2">Value</div>
             <div style="text-align:center" id="legend"></div>
-            <div style="text-align:center" id="legendtitle2">Value</div>
             <div id="legend2"></div>
         </div>
         
@@ -55,6 +58,7 @@
   <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Arimo|Dosis|Lato' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="tachyons.css">
 <script>
   var data = [];
   var options = {
@@ -90,7 +94,7 @@
 
 
     var charts = [
-       new Chart('#chart1',data, 'OverallPriorityRank ', 'Priority Park Rank', 'VulnerabilityScore','Vulnerability',0,30,1,5)
+       new Chart('#chart1',data, 'OverallPriorityRank ', 'Priority Park Rank', 'VulnerabilityScore','Vulnerability',0,31,1,5)
      ];
 
  });
@@ -114,8 +118,7 @@
     // SCALES 
     chart.x = d3.scale.linear()
       .domain([scaleMax, scaleMin])
-      .range([0, width])
-      .nice();
+      .range([0, width]);
 
     chart.y = d3.scale.linear()
       .domain([vulnMin, vulnMax])
@@ -137,13 +140,17 @@
     chart.xaxispadding=35
 
 
+    var ticks = [0,7.75,15.2,23.25,31];
+
+    var tickLabels = ['','Higher Priority ->','','<- Lower Priority']
 
 
     chart.xAxis = d3.svg.axis()
       .tickSize(-height,0)
       .scale(chart.x)
       .orient("bottom")
-      .ticks(10, '.f'); 
+      .tickValues(ticks)
+      .tickFormat(function(d,i){ return tickLabels[i] });
 
     chart.yAxis = d3.svg.axis()
       .orient("left")
@@ -190,7 +197,7 @@
 
     points.enter().append('circle')
        .attr('r',0)
-       .style('opacity',.7)
+       .style('opacity',.9)
        .on('mouseover', function(){
           d3.select(this).style("stroke",'#fff');
        })

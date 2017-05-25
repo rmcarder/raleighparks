@@ -133,6 +133,15 @@
       font-family: 'Open Sans', sans-serif;
       color: #CECECE;
           }
+        .legendtitle{
+      font-family: 'Open Sans', sans-serif;
+      color: #CECECE;
+      font-size: 11px;
+          }
+
+        .whitespan{
+          color:#fff;
+        }
 
     label {
       font-weight: 2px;
