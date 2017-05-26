@@ -23,95 +23,6 @@
        stroke-width: 1.1;
     }
 
-    
-    .label {
-      font-weight: 700;
-    }
-
-    .point {
-      
-      fill: #5e4fa2;
-      opacity: .7;
-    }
-
-      .point.filtered {
-      opacity: .07;
-    }
-  
-    .point2 {
-      
-      fill: #3288bd;
-      opacity: .7;
-    }
-   
-    .point3 {
-     
-      fill:#66c2a5 ;
-      opacity: .7;
-    }
-   
-      .point4 {
-        fill:#abdda4;
-      
-      opacity: .7;
-    }
-       .point5 {
-      
-      fill: #e6f598;
-      opacity: .7;
-    }
-       .point6 {
-      
-      fill: #fee08b;
-      opacity: .7;
-    }
-       .point7 {
-      
-      fill: #fdae61;
-      opacity: .7;
-    }
-       .point8 {
-      
-      fill:#f46d43 ;
-      opacity: .7;
-    }
-       .point9 {
-      
-      fill: #d53e4f;
-      opacity: .7;
-    }
-       .point10 {
-      
-      fill: #9e0142;
-      opacity: .7;
-    }
-    .point4.filtered {
-      opacity: .07;
-    }
-
-    .bar {
-      stroke: rgb(240, 59, 32);
-      stroke-width: 1;
-      fill: rgb(240, 59, 32);
-      opacity: 1;
-    }
-
-    .bar text {
-      fill: #fff;
-      font: 10px sans-serif;
-    }
-
-    .ybar {
-      stroke: rgb(240, 59, 32);
-      stroke-width: 1;
-      fill: rgb(240, 59, 32);
-      opacity: 1;    }
-
-    .ybar text {
-      fill: #fff;
-      font: 10px sans-serif;
-    }
-
    
     .axis text {
         font-family: 'Open Sans', sans-serif;
@@ -132,6 +43,8 @@
       .legendtext,#legend {
       font-family: 'Open Sans', sans-serif;
       color: #CECECE;
+         font-size: 11px;
+      
           }
         .legendtitle{
       font-family: 'Open Sans', sans-serif;

@@ -19,9 +19,15 @@
 <body>
 <div class="header section">
   <div class="container">
-    <h1 class="head">Raleigh Parks</h1>
+    <h1 class="head">Raleigh Priority Parks</h1>
     <p class='head'>The Neighborhood and Community Connections Program is a $1 million effort to increase walkable connections between Raleigh’s neighborhoods and nearby parks and greenways.</p>
   </div>
+<a href="https://github.com/rmcarder/raleighparks"><svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 250 250" fill="#383838" style="position: absolute; top: 0; right: 0">
+  <path d="M0 0l115 115h15l12 27 108 108V0z" fill="#CECECE"/>
+  <path class="octo-arm" d="M128 109c-15-9-9-19-9-19 3-7 2-11 2-11-1-7 3-2 3-2 4 5 2 11 2 11-3 10 5 15 9 16" style="-webkit-transform-origin: 130px 106px; transform-origin: 130px 106px"/>
+  <path class="octo-body" d="M115 115s4 2 5 0l14-14c3-2 6-3 8-3-8-11-15-24 2-41 5-5 10-7 16-7 1-2 3-7 12-11 0 0 5 3 7 16 4 2 8 5 12 9s7 8 9 12c14 3 17 7 17 7-4 8-9 11-11 11 0 6-2 11-7 16-16 16-30 10-41 2 0 3-1 7-5 11l-12 11c-1 1 1 5 1 5z"/>
+</svg></a>
+
 </div>
 <div class="controls section">
   <div class="container">
@@ -33,13 +39,14 @@
             <div id="chart1"></div>
         </div>
          <div class="col-lg-6 col-md-6" col-sm-4>
-          <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Vulnerability </strong>- This measure is used to promote the N&CC Program’s goal of health equity, by targeting investment in pedestrian infrastructure in those neighborhoods that would benefit most from increased walkability. Vulnerability scores are derived from socioeconomic and demographic indicators that correlate with high vulnerability to negative health outcomes such as heart disease and childhood obesity. The indicators used in this analysis are: Unemployment, Age Dependency, Educational Attainment, Housing Vacancy, and Poverty Rates.<br><strong class='whitespan'>Displayed on: Y-Axis </strong></div>
+          <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Vulnerability </strong>- This measure is used to promote the N&CC Program’s goal of health equity, by targeting investment in pedestrian infrastructure in neighborhoods that would benefit most from increased walkability. Vulnerability scores are derived from socioeconomic and demographic indicators (Unemployment, Age Dependency, Educational Attainment, Housing Vacancy, and Poverty Rates) that correlate with high vulnerability to negative health outcomes.<br><strong class='whitespan'>Displayed on: Y-Axis </strong></div>
 
-            <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Circuitry </strong>- This measure is used to identify areas of the city where street network topology is inefficient, and thus areas that could benefit from the addition of new links and nodes. Circuitry scores are derived from the ratio of Euclidean Distance : Network Distance between an origin (census block) and a destination (park access point). A high circuitry score indicates that nearby residents have to travel a disproportionately long distance to reach their nearest park.<br><strong class='whitespan'>Displayed with: Circle Color </strong></div>
-
+            <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Circuitry </strong>- This measure is used to identify areas of the city where street network topology is inefficient, and thus areas that could benefit from the addition of new links and nodes. Circuitry scores are calculated using distances between census blocks and park access points. A high circuitry score indicates that nearby residents have to travel a disproportionately long distance to reach their nearest park.<br><strong class='whitespan'>Displayed with: Circle Color </strong></div>
+            <div id='circuitry'></div>
             <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Pedestrian Safety </strong>- This measure is used to identify park service areas that are particularly unsafe for pedestrians. Pedestrian Safety scores are derived from an analysis of street typology, speed limits, and the presence or absence of sidewalks within the park service area.<br><strong class='whitespan'>Displayed in: Mouseover Tooltip </strong></div>
 
-            <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Population</strong>- A fourth criteria considered in determining which projects to fund through the N&CC program is the population that would benefit from each proposed project. This chart visualizes the total population living within each park’s service area, which gives a sense of the potential number of people who could benefit from investments in each particular park.<br><strong class='whitespan'>Displayed with: Circle Size </strong></div>
+            <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Population</strong>- The total number of people living within each park’s service area, which gives a sense of the potential number of people who could benefit from investments in each particular park.<br><strong class='whitespan'>Displayed with: Circle Size </strong></div>
+            <div id='Population'></div>
             <div style="text-align:center" id="legend"></div>
             <div id="legend2"></div>
         </div>
@@ -69,10 +76,13 @@
   var margin = { top: 15, right: 60, bottom: 40, left: 70 };
   var width = parseInt(d3.select('#chart1').style('width'), 10)
   var width = width - margin.right - margin.left;
-  var aspectRatio = .8
+  var aspectRatio = .75
   var height = width*aspectRatio;
   var color_range = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
-  var data_bins = [.40, .5, .6, .7, .8 ,.9, 1];
+  var data_bins = [10, 13, 16, 19, 22 ,25, 28];
+     var rscale = d3.scale.sqrt()
+      .domain([5000, 33000])
+      .range([0,width/20]);
 
   
  // FETCH DATA
@@ -126,9 +136,7 @@
       .range([height, 0])
       .nice();
 
-    rscale = d3.scale.sqrt()
-      .domain([5000, 33000])
-      .range([0,30]);
+ 
 
     chart.colorScale = d3.scale.linear().domain(data_bins).range(color_range);
 
@@ -186,7 +194,7 @@
   chart.pointTooltip = d3.tip()
        .attr('class', 'tooltip')
        .offset([-6, 0])
-       .html(function(d) { return d.SITE +'<br>' + "Priority Rank: " + d[xvariable]+ '<br>' +d3.format(',')(d.POP_SCORE) +' residents served ' + '<br> '+'Vulnerability Score: '+ (d3.format('.1f'))(d.VulnerabilityScore)+ '<br> '+'Circuitry Score: ' +(d3.format('.1f'))(d.CircuitryScore)+ '<br> '+'Pedestrian Safety Score: '+(d3.format('.1f'))(d.PedScore); });
+       .html(function(d) { return d.SITE +'<br>' + "Overall Priority Rank: " + d[xvariable]+ '<br>'+ 'Population Benefiting: ' +d3.format(',')(d.POP_SCORE) + '<br> '+'Vulnerability Score: '+ (d3.format('.1f'))(d.VulnerabilityScore)+ '<br> '+'Circuitry Score: ' +(d3.format('.1f'))((d.CircuitryScore)/10)+ '<br> '+'Pedestrian Safety Score: '+(d3.format('.1f'))(d.PedScore); });
 
      chart.pointTooltip(chart.svg);
  
@@ -210,7 +218,7 @@
     .transition().duration(3000).ease('elastic').delay(function(d, i) {
         return i / txdata.length * 700;  // Dynamic delay (i.e. each item delays a little longer)
         })
-      .style('fill',function (d) { return chart.colorScale(d.Alpha); })
+      .style('fill',function (d) { return chart.colorScale(d.CircuitryScore); })
       .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
       .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
       .attr('r', function (d) { return rscale(d.POP_SCORE); });
@@ -243,6 +251,10 @@ chart.svg
     chart.y
       .range([height, 0]);
 
+
+    rscale
+      .range([0,width/20]);
+
     chart.xAxis
       .tickSize(-height,0)
       .scale(chart.x); 
@@ -273,8 +285,8 @@ chart.svg
       .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
       .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
       .attr('r', function (d) { return rscale(d.POP_SCORE); })
-         .on('mouseover', chart.pointTooltip.show)
-       .on('mouseout', chart.pointTooltip.hide);
+      .on('mouseover', chart.pointTooltip.show)
+      .on('mouseout', chart.pointTooltip.hide);
     
 
 
@@ -315,6 +327,6 @@ chart.svg
     // REGRESSION LINE
   
 </script>
-<script src="legend2.js"></script>
+<script src="legend.js"></script>
 </body>
 </html>
