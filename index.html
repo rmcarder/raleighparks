@@ -40,8 +40,6 @@
             <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Pedestrian Safety </strong>- This measure is used to identify park service areas that are particularly unsafe for pedestrians. Pedestrian Safety scores are derived from an analysis of street typology, speed limits, and the presence or absence of sidewalks within the park service area.<br><strong class='whitespan'>Displayed in: Mouseover Tooltip </strong></div>
 
             <div style="text-align:center" class="legendtitle pv2"><strong class='whitespan'>Population</strong>- A fourth criteria considered in determining which projects to fund through the N&CC program is the population that would benefit from each proposed project. This chart visualizes the total population living within each park’s service area, which gives a sense of the potential number of people who could benefit from investments in each particular park.<br><strong class='whitespan'>Displayed with: Circle Size </strong></div>
-
-            <div style="text-align:center" class="legendtitle2">Value</div>
             <div style="text-align:center" id="legend"></div>
             <div id="legend2"></div>
         </div>
@@ -274,7 +272,9 @@ chart.svg
     points
       .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
       .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
-      .attr('r', function (d) { return rscale(d.POP_SCORE); });
+      .attr('r', function (d) { return rscale(d.POP_SCORE); })
+         .on('mouseover', chart.pointTooltip.show)
+       .on('mouseout', chart.pointTooltip.hide);
     
 
 
@@ -315,6 +315,6 @@ chart.svg
     // REGRESSION LINE
   
 </script>
-<script src="legend.js"></script>
+<script src="legend2.js"></script>
 </body>
 </html>
