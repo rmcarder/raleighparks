@@ -44,7 +44,7 @@
       font-family: 'Open Sans', sans-serif;
       color: #CECECE;
          font-size: 11px;
-      
+
           }
         .legendtitle{
       font-family: 'Open Sans', sans-serif;
@@ -80,20 +80,125 @@
       background-color: #CECECE;
       color: #4C4C4C;
       border: none;
-      border-radius: 24px;
+      border-radius: 24px;}
 
-    .axis path,
-    .axis line {
-      fill: none;
-      stroke: #CECECE;
-      shape-rendering: crispEdges;
-                }
+.btn {
+   outline:none;
+   background: transparent;
+   color: #CECECE;
+   border: 1px solid color: #CECECE;;
+   border-radius: 24px;
+   border-color: #CECECE;
+   outline:0;
+   width: 70px;
+   font-family: 'Open Sans', sans-serif;
+   font-size: 11px;
+   fill: #CECECE;
+  margin: 0 auto;
+}
 
-    .btn-toolbar {
-        font-weight: 2px;
-      color: #FFFFFF;
-    }
+.btn .btn-group-vertical{
+  position: 50%;
+  text-align: center;
+  outline:none;
+  background: transparent;
+  color: #CECECE;
+  border: 1px solid color: #CECECE;;
+  border-radius: 24px;
+   outline:0;
 
-    
+}
+
+.hidden {
+  display: none;
+}
+
+.vert {
+  border-radius: ;
+}
+.btn:hover {
+    position: 50%;
+  background-color: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #CECECE;
+  border-radius: 24px;
+}
+.btn-group .btn:active .btn.active{
+  position: 50%;
+  background: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline:0;
+}
+
+.btn-group .btn:focus{
+  position: 50%;
+  background: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline:0;
+}
+
+.btn-group-vertical .btn:active{
+  position: 50%;
+  background: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline:none;
+}
+
+.btn-group-vertical .btn:hover{
+  position: 50%;
+  background: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline:none;
+}
+.btn-group-vertical .btn:focus{
+  position: 50%;
+  background: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline:none;
+}
+
+.btn-group-vertical .btn:visited{
+  position: 50%;
+  background: #F57E20;
+  color: none;
+  border: none solid #FFFFFF;
+  border-radius: 24px;
+  outline:none;
+}
+
+.btn:focus{
+  background-color: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline: 0;
+}
+.btn.active{
+  background-color: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline:0;
+}
+
+.btn.focus{
+  background-color: #F57E20;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 24px;
+  outline:0;
+}
+
+
 
  
