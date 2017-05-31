@@ -118,14 +118,14 @@
 }
 .btn:hover {
     position: 50%;
-  background-color: #F57E20;
+  background-color: #2171b5;
   color: #FFFFFF;
   border: 1px solid #CECECE;
   border-radius: 24px;
 }
 .btn-group .btn:active .btn.active{
   position: 50%;
-  background: #F57E20;
+  background: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;
@@ -134,7 +134,7 @@
 
 .btn-group .btn:focus{
   position: 50%;
-  background: #F57E20;
+  background: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;
@@ -143,7 +143,7 @@
 
 .btn-group-vertical .btn:active{
   position: 50%;
-  background: #F57E20;
+  background: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;
@@ -152,7 +152,7 @@
 
 .btn-group-vertical .btn:hover{
   position: 50%;
-  background: #F57E20;
+  background: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;
@@ -160,7 +160,7 @@
 }
 .btn-group-vertical .btn:focus{
   position: 50%;
-  background: #F57E20;
+  background: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;
@@ -169,7 +169,7 @@
 
 .btn-group-vertical .btn:visited{
   position: 50%;
-  background: #F57E20;
+  background: #2171b5;
   color: none;
   border: none solid #FFFFFF;
   border-radius: 24px;
@@ -177,14 +177,14 @@
 }
 
 .btn:focus{
-  background-color: #F57E20;
+  background-color: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;
   outline: 0;
 }
 .btn.active{
-  background-color: #F57E20;
+  background-color: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;
@@ -192,7 +192,7 @@
 }
 
 .btn.focus{
-  background-color: #F57E20;
+  background-color: #2171b5;
   color: #FFFFFF;
   border: 1px solid #FFFFFF;
   border-radius: 24px;

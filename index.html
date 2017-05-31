@@ -23,7 +23,7 @@
     <p class='head'>The Neighborhood and Community Connections Program is a $1 million effort to increase walkable connections between Raleigh’s neighborhoods and nearby parks and greenways.</p>
   </div>
 <a href="https://github.com/rmcarder/raleighparks"><svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 250 250" fill="#383838" style="position: absolute; top: 0; right: 0">
-  <path d="M0 0l115 115h15l12 27 108 108V0z" fill="#F57E20"/>
+  <path d="M0 0l115 115h15l12 27 108 108V0z" fill="#CECECE"/>
   <path class="octo-arm" d="M128 109c-15-9-9-19-9-19 3-7 2-11 2-11-1-7 3-2 3-2 4 5 2 11 2 11-3 10 5 15 9 16" style="-webkit-transform-origin: 130px 106px; transform-origin: 130px 106px"/>
   <path class="octo-body" d="M115 115s4 2 5 0l14-14c3-2 6-3 8-3-8-11-15-24 2-41 5-5 10-7 16-7 1-2 3-7 12-11 0 0 5 3 7 16 4 2 8 5 12 9s7 8 9 12c14 3 17 7 17 7-4 8-9 11-11 11 0 6-2 11-7 16-16 16-30 10-41 2 0 3-1 7-5 11l-12 11c-1 1 1 5 1 5z"/>
 </svg></a>
@@ -40,8 +40,8 @@
   <div style="text-align:center;">
           <div class="btn-group text-center" role="group" aria-label="Filter" style="text-align:center;">
 
-    <button type="button" class="btn btn-primary" autofocus="true">Top 30</button>
-    <button type="button" class="btn btn-primary">All</button>
+    <button type="button" class="btn btn-primary" autofocus="true" id='top30'>Top 30</button>
+    <button type="button" class="btn btn-primary" id='all'>All</button>
   </div>
             <div id="chart1"></div>
         </div>
@@ -78,8 +78,7 @@
 <script>
   var data = [];
   var options = {
-    tier: 'all',
-    team: 'all',
+    all: 'no',
   };
   var margin = { top: 15, right: 60, bottom: 40, left: 70 };
   var width = parseInt(d3.select('#chart1').style('width'), 10)
@@ -89,7 +88,7 @@
   var color_range = ['#eff3ff','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'];
   var data_bins = [10, 13, 16, 19, 22 ,25, 28];
      var rscale = d3.scale.sqrt()
-      .domain([5000, 33000])
+      .domain([5000, 37000])
       .range([0,width/20]);
 
   
@@ -103,11 +102,11 @@
     
 
 
-    if (options.team !== 'all') {
-      var team = options.team;
+    if (options.all !== 'yes') {
+      var ShowAll = options.all;
 
-      gxdata = gxdata.filter(function (d) {
-        return d.Team === team;
+      txdata = txdata.filter(function (d) {
+        return d.ShowAll === 'yes';
       });
     }
 
@@ -117,7 +116,11 @@
      ];
 
  });
+
+d3.select("#top30").classed('active',true);
   
+
+
 
   function Chart(selector, txdata, xvariable, xtitle, yvariable, ytitle, scaleMin, scaleMax, vulnMin, vulnMax) {    
     var chart = this;
@@ -157,7 +160,7 @@
     chart.xaxispadding=35
 
 
-    var ticks = [0,7.75,15.2,23.25,31];
+    var ticks = [0,7.75,15.5,23.25,31,38.75,46.5,54.25,62,69.75,77.5,85.25,93,100.75,108.5,116.25,124];
 
     var tickLabels = ['','Higher Priority ->','','<- Lower Priority']
 
@@ -176,7 +179,7 @@
       .ticks(4,'0s');
     
     chart.gx = chart.svg.append("g")
-      .attr("class","y axis")
+      .attr("class","x axis")
       .attr("transform","translate(0,"+ height + ")")
       .call(chart.xAxis)
       ;
@@ -301,6 +304,208 @@ chart.svg
     //chart.update(txdata);
   
 }
+
+d3.select("#top30")
+      .on("click", function(){
+          options.all="no";
+           d3.select("#top30")
+          .classed('active',true);
+          d3.select("#all")
+          .classed('active',false);
+          newXaxis=31;
+          rFactor=1;
+          rescale();
+        });
+
+d3.select("#all")
+      .on("click", function(){
+          options.all="no";
+           d3.select("#all")
+          .classed('active',true);
+          d3.select("#top30")
+          .classed('active',false);
+          newXaxis=131;
+          rFactor=2;
+          rescale();
+        });
+
+
+    function rescale() {
+        console.log('naaoo"');
+
+    chart.x
+        .domain([newXaxis,0]);
+
+    chart.svg.selectAll('g.x.axis')
+        .transition().duration(1500).ease("sin-in-out") 
+        .call(chart.xAxis);
+
+     points
+      .transition().duration(1500).ease("sin-in-out") 
+      .attr('cx', function (d) { return chart.x(d[chart.xvariable]); })
+      .attr('cy', function (d) { return chart.y(d[chart.yvariable]); })
+      .attr('r', function (d) { return rscale(d.SUM_POP)/rFactor; })
+      .on('mouseover', chart.pointTooltip.show)
+      .on('mouseout', chart.pointTooltip.hide);
+
+
+   var svgWidth = 420;
+
+var startValue=svgWidth/2-10;
+
+var spacing= 5;
+
+
+var legend=d3.select('#circuitry')
+  .append('center')
+  .append('svg')
+  .attr("text-anchor", "middle")
+  .style('height',20);
+
+legend
+      .append('text')
+      .attr('x',60)
+      .attr('y',14)
+      .attr('class','legendtext')
+      .text('1 Mile').style('fill','#CECECE');
+
+
+    legend
+      .append('circle')
+      .attr('fill','#eff3ff')
+      .attr('cx',92)
+      .attr('cy',10)
+      .attr('r',8);
+
+    legend
+      .append('circle')
+      .attr('fill','#c6dbef')
+      .attr('cx',112)
+      .attr('cy',10)
+      .attr('r',8);
+
+    legend
+      .append('circle')
+      .attr('fill','#9ecae1')
+      .attr('cx',132)
+      .attr('cy',10)
+      .attr('r',8);
+        legend
+      .append('circle')
+      .attr('fill','#6baed6')
+      .attr('cx',152)
+      .attr('cy',10)
+      .attr('r',8);
+        legend
+      .append('circle')
+      .attr('fill','#4292c6')
+      .attr('cx',172)
+      .attr('cy',10)
+      .attr('r',8);
+        legend
+      .append('circle')
+      .attr('fill','#2171b5')
+      .attr('cx',192)
+      .attr('cy',10)
+      .attr('r',8);
+        legend
+      .append('circle')
+      .attr('fill','#084594')
+      .attr('cx',212)
+      .attr('cy',10)
+      .attr('r',8);
+    legend
+      .append('text')
+      .attr('x',247)
+      .attr('y',14)
+      .attr('class','legendtext')
+      .text('2.8 Miles').style('fill','#CECECE');
+
+
+
+
+var legend2=d3.select('#Population')
+  .append('center')
+  .append('svg')
+  .attr("text-anchor", "middle")
+  .style('height',60)
+  .style('width',svgWidth);
+
+legend2
+      .append('text')
+      .attr('x',function (d) { return startValue-(rscale(25000)+2*rscale(20000)+2*rscale(15000)+6*rscale(10000)+4*spacing); })
+      .attr('y',34)
+      .attr('class','legendtext')
+      .text('10,000').style('fill','#CECECE');
+
+
+var point1=legend2
+      .append('circle').attr('id','legend2')
+      .attr('fill','none')
+      .attr('class','legend2')
+      .attr('stroke','#CECECE')
+      .attr('cx',function (d) { return startValue-(rscale(25000)+2*rscale(20000)+2*rscale(15000)+rscale(10000)+3*spacing); })
+      .attr('cy',30)
+      .attr('r', function (d) { return rscale(10000); });
+
+    legend2
+      .append('circle')
+      .attr('fill','none')
+      .attr('class','legend2')
+      .attr('stroke','#CECECE')
+      .attr('cx',function (d) { return startValue-(rscale(25000)+2*rscale(20000)+rscale(15000)+2*spacing); })
+      .attr('cy',30)
+      .attr('r', function (d) { return rscale(15000); });
+
+    legend2
+      .append('circle')
+      .attr('fill','none')
+      .attr('class','legend2')
+      .attr('stroke','#CECECE')
+      .attr('cx',function (d) { return startValue-(rscale(25000)+rscale(20000)+spacing);})
+      .attr('cy',30)
+      .attr('r', function (d) { return rscale(20000); });
+
+    legend2
+      .append('circle')
+      .attr('fill','none')
+      .attr('class','legend2')
+      .attr('stroke','#CECECE')
+      .attr('cx',startValue)
+      .attr('cy',30)
+      .attr('r', function (d) { return rscale(25000); });
+
+    legend2
+      .append('circle')
+      .attr('fill','none')
+      .attr('class','legend2')
+      .attr('stroke','#CECECE')
+      .attr('cx',function (d) { return startValue+(rscale(25000)+rscale(30000)+spacing);})
+      .attr('cy',30)
+      .attr('r', function (d) { return rscale(30000); });
+
+    legend2
+      .append('circle')
+      .attr('fill','none')
+      .attr('class','legend2')
+      .attr('stroke','#CECECE')
+      .attr('cx',function (d) { return startValue+(rscale(25000)+2*rscale(30000)+rscale(35000)+2*spacing);})
+      .attr('cy',30)
+      .attr('r', function (d) { return rscale(35000); });
+
+    legend2
+      .append('text')
+      .attr('x',function (d) { return startValue+(rscale(25000)+2*rscale(30000)+3*rscale(35000)+3*spacing);})
+      .attr('y',34)
+      .attr('class','legendtext')
+      .html(function(d) { return '35,000';})
+      .style('fill','#CECECE')
+      .style('text-align','left');
+
+
+        }
+
+
 
 
   }
